@@ -6,9 +6,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.prt.tetris.view.controllers.GameOverController">
+<AnchorPane prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.atka.tetrisai.view.controllers.GameOverController">
    <children>
-      <Button fx:id="buttonSave" layoutX="110.0" layoutY="161.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Save to database" />
       <Label layoutX="73.0" layoutY="24.0" text="GAME OVER">
          <font>
             <Font name="System Bold" size="30.0" />
