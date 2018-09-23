@@ -3,12 +3,16 @@ package hu.atka.tetrisai.controller.game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hu.atka.tetrisai.ai.BotClassroom;
+
 /**
  * The representation of a simple game of Tetris.
  * 
  * @author Atka
  */
 public class Game {
+
+	private BotClassroom classroom;
 
 	/**
 	 * The logger of the object.
@@ -46,6 +50,8 @@ public class Game {
 	 * Constructor to initialize a game.
 	 */
 	public Game() {
+		classroom = new BotClassroom();
+
 		logger.info("New game created.");
 		tickCount = 0;
 		gameOver = false;
