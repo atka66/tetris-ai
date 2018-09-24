@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The representation of a tetris piece.
- * 
+ *
  * @author Atka
  */
 public class Piece {
@@ -40,7 +40,7 @@ public class Piece {
 
 	/**
 	 * Moves the piece.
-	 * 
+	 *
 	 * @param xx
 	 *            the number of steps in the X-axis
 	 * @param yy
@@ -49,13 +49,13 @@ public class Piece {
 	public void move(int xx, int yy) {
 		x += xx;
 		y += yy;
-		logger.info("Piece moved to [" + x + "," + y + "]");
+		//logger.info("Piece moved to [" + x + "," + y + "]");
 	}
 
 	/**
 	 * Rotates the figure of the piece by 90 degrees clockwise or
 	 * counterclockwise.
-	 * 
+	 *
 	 * @param right
 	 *            if true, it turns clockwise, otherwise it turns
 	 *            counterclockwise
@@ -78,12 +78,12 @@ public class Piece {
 			}
 			figure = figureTemp;
 		}
-		logger.info("Piece rotated " + (right ? "clockwised" : "counterclockwised"));
+		//logger.info("Piece rotated " + (right ? "clockwise" : "counterclockwise"));
 	}
 
 	/**
 	 * Getter method for the figure.
-	 * 
+	 *
 	 * @return the figure
 	 */
 	public int[][] getFigure() {
@@ -92,7 +92,7 @@ public class Piece {
 
 	/**
 	 * Setter method for the figure.
-	 * 
+	 *
 	 * @param figure
 	 *            the figure to set
 	 */
@@ -102,7 +102,7 @@ public class Piece {
 
 	/**
 	 * Getter method for the distance from the left side.
-	 * 
+	 *
 	 * @return the distance from the left side
 	 */
 	public int getX() {
@@ -111,7 +111,7 @@ public class Piece {
 
 	/**
 	 * Setter method for the distance from the left side.
-	 * 
+	 *
 	 * @param x
 	 *            the distance to set from the left side
 	 */
@@ -121,7 +121,7 @@ public class Piece {
 
 	/**
 	 * Getter method for the distance from the top.
-	 * 
+	 *
 	 * @return the distance from the top
 	 */
 	public int getY() {
@@ -130,7 +130,7 @@ public class Piece {
 
 	/**
 	 * Setter method for the distance from the top.
-	 * 
+	 *
 	 * @param y
 	 *            the distance to set from the top
 	 */

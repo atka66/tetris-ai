@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The representation of the playing area and addictional methods to simulate
  * proper {@link Piece} behavior.
- * 
+ *
  * @author Atka
  */
 public class Field {
@@ -33,10 +33,32 @@ public class Field {
 		}
 	}
 
+	public boolean[][] getCurrentVisual(Piece currentPiece) {
+		boolean[][] currentVisual = new boolean[20][10];
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (this.getMap()[i][j] == 0) {
+					currentVisual[i][j] = false;
+				} else {
+					currentVisual[i][j] = true;
+				}
+			}
+		}
+		int[][] figure = currentPiece.getFigure();
+		for (int i = 0; i < figure.length; i++) {
+			for (int j = 0; j < figure[i].length; j++) {
+				if (figure[i][j] != 0) {
+					currentVisual[currentPiece.getY() + i][currentPiece.getX() + j] = true;
+				}
+			}
+		}
+		return currentVisual;
+	}
+
 	/**
 	 * Checks if a {@link Piece} has enough space to spawn in to the top-center
 	 * part of the map.
-	 * 
+	 *
 	 * @param piece
 	 *            the piece to check
 	 * @return true if the piece can be spawn, false otherwise
@@ -57,7 +79,7 @@ public class Field {
 	/**
 	 * Checks if a {@link Piece} collides with already settled pieces or the
 	 * sides of the map while performing a {@link PieceAction}.
-	 * 
+	 *
 	 * @param piece
 	 *            the piece to check
 	 * @param action
@@ -113,11 +135,11 @@ public class Field {
 				if (figure[i][j] != 0) {
 					try {
 						if (getMap()[piece.getY() + i + yy][piece.getX() + j + xx] != 0) {
-							logger.info("Piece Collides with an already settled piece");
+							//logger.info("Piece Collides with an already settled piece");
 							return true;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
-						logger.info("Piece Collides with the border");
+						//logger.info("Piece Collides with the border");
 						return true;
 					}
 				}
@@ -130,7 +152,7 @@ public class Field {
 	 * Settles a {@link Piece} on the map by setting the values at the proper
 	 * coordinates with the values of the piece's figure. This method also
 	 * clears the rows that got filled by the settling.
-	 * 
+	 *
 	 * @param piece
 	 *            the piece to settle
 	 * @return the number of rows cleared
@@ -161,7 +183,7 @@ public class Field {
 
 	/**
 	 * Checks if the specified row of the map is filled with blocks.
-	 * 
+	 *
 	 * @param i
 	 *            the row of the map to check
 	 * @return true if the row is full, false otherwise
@@ -177,7 +199,7 @@ public class Field {
 
 	/**
 	 * Getter method for the map.
-	 * 
+	 *
 	 * @return the map
 	 */
 	public int[][] getMap() {
@@ -186,7 +208,7 @@ public class Field {
 
 	/**
 	 * Setter method for the map.
-	 * 
+	 *
 	 * @param map
 	 *            the map to set
 	 */

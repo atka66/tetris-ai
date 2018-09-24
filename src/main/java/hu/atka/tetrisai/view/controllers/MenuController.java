@@ -1,19 +1,14 @@
 //CHECKSTYLE:OFF
 package hu.atka.tetrisai.view.controllers;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import hu.atka.tetrisai.ai.BotClassroom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 public class MenuController implements Initializable {
 
@@ -24,8 +19,18 @@ public class MenuController implements Initializable {
 	@FXML
 	Button buttonStartGame;
 
+	BotClassroom classroom;
+
 	@FXML
 	private void handleButtonStartGame(ActionEvent event) {
+		for(int i = 0; i < 10000; i++) {
+			classroom.testStudents();
+			System.out.println("---- Generation: " + (i+1));
+			System.out.println("- Fitness: " + classroom.getFittestStudent().getFitness());
+			System.out.println("- Number of neurons: " + classroom.getFittestStudent().getNeurons().size());
+			System.out.println("- Neurons: " + classroom.getFittestStudent().getNeurons());
+		}
+		/*
 		Stage stage;
 		Parent root;
 		try {
@@ -39,9 +44,10 @@ public class MenuController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
-
+		classroom = new BotClassroom();
 	}
 }

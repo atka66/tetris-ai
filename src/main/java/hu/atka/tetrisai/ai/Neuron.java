@@ -56,4 +56,16 @@ public class Neuron {
   public void setIntensity(double intensity) {
     this.intensity = intensity;
   }
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("Neuron{");
+		sb.append("X=").append(watchedX);
+		sb.append(" -- Y=").append(watchedY);
+		sb.append(" -- Block=").append(watchedBlock);
+		sb.append(" -- action=").append(action);
+		sb.append(" -- intensity=").append(intensity);
+		sb.append('}');
+		return sb.toString();
+	}
 }

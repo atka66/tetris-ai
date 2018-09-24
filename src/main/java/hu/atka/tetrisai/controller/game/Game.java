@@ -3,16 +3,15 @@ package hu.atka.tetrisai.controller.game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hu.atka.tetrisai.ai.BotClassroom;
+import hu.atka.tetrisai.ai.Bot;
 
 /**
  * The representation of a simple game of Tetris.
- * 
  * @author Atka
  */
 public class Game {
 
-	private BotClassroom classroom;
+	private Bot player;
 
 	/**
 	 * The logger of the object.
@@ -49,8 +48,8 @@ public class Game {
 	/**
 	 * Constructor to initialize a game.
 	 */
-	public Game() {
-		classroom = new BotClassroom();
+	public Game(Bot player) {
+		this.player = player;
 
 		logger.info("New game created.");
 		tickCount = 0;
@@ -59,33 +58,69 @@ public class Game {
 		nextPiece = PieceFactory.CreateRandomPiece();
 	}
 
+	public void playSession() {
+		while (!this.isGameOver()) {
+			this.tick();
+
+			if (currentPiece != null) {
+				PieceAction decision = this.player.determineActionAccordingToVisual(this.getField().getCurrentVisual(this.currentPiece));
+				this.moveCurrentPiece(decision);
+			}
+		}
+		this.player.setFitness((this.points * 100) + this.tickCount);
+		logger.info("Fitness of bot:" + this.player.getFitness());
+	}
+
+	private void moveCurrentPiece(PieceAction action) {
+		if (!this.getField().isPieceCollide(this.getCurrentPiece(), action)) {
+			switch (action) {
+				case DOWN:
+					break;
+				case LEFT:
+					//logger.info("Bot moves the piece to the LEFT");
+					this.getCurrentPiece().move(-1, 0);
+					break;
+				case RIGHT:
+					//logger.info("Bot moves the piece to the RIGHT");
+					this.getCurrentPiece().move(1, 0);
+					break;
+				case ROTATE_LEFT:
+					//logger.info("Bot rotates the piece COUNTER CLOCKWISE");
+					this.getCurrentPiece().rotate(false);
+					break;
+				case ROTATE_RIGHT:
+					//logger.info("Bot rotates the piece CLOCKWISE");
+					this.getCurrentPiece().rotate(true);
+					break;
+			}
+		}
+	}
+
 	/**
 	 * Accounts an ammount of points according to the number of rows cleared at
 	 * once.
-	 * 
-	 * @param rows
-	 *            the number of rows cleared at once
+	 * @param rows the number of rows cleared at once
 	 */
 	public void accountRows(int rows) {
 		switch (rows) {
-		case 1: {
-			points += 40;
-			break;
+			case 1: {
+				points += 40;
+				break;
+			}
+			case 2: {
+				points += 100;
+				break;
+			}
+			case 3: {
+				points += 300;
+				break;
+			}
+			case 4: {
+				points += 1200;
+				break;
+			}
 		}
-		case 2: {
-			points += 100;
-			break;
-		}
-		case 3: {
-			points += 300;
-			break;
-		}
-		case 4: {
-			points += 1200;
-			break;
-		}
-		}
-		logger.info(rows + " row(s) cleared. Current points: " + points);
+		//logger.info(rows + " row(s) cleared. Current points: " + points);
 	}
 
 	/**
@@ -98,7 +133,7 @@ public class Game {
 	public void tick() {
 		tickCount++;
 		if (currentPiece == null) {
-			logger.info("Next piece replaces current piece, and gets a new random one");
+			//logger.info("Next piece replaces current piece, and gets a new random one");
 			currentPiece = new Piece();
 			currentPiece.setFigure(nextPiece.getFigure());
 			gameOver = field.isBadSpawn(currentPiece);
@@ -116,7 +151,6 @@ public class Game {
 
 	/**
 	 * Getter method for the field.
-	 * 
 	 * @return the field
 	 */
 	public Field getField() {
@@ -125,9 +159,7 @@ public class Game {
 
 	/**
 	 * Setter method for the field.
-	 * 
-	 * @param field
-	 *            the field to set
+	 * @param field the field to set
 	 */
 	public void setField(Field field) {
 		this.field = field;
@@ -135,7 +167,6 @@ public class Game {
 
 	/**
 	 * Getter method for the current piece.
-	 * 
 	 * @return the current piece
 	 */
 	public Piece getCurrentPiece() {
@@ -144,9 +175,7 @@ public class Game {
 
 	/**
 	 * Setter method for the current piece.
-	 * 
-	 * @param currentPiece
-	 *            the current piece to set
+	 * @param currentPiece the current piece to set
 	 */
 	public void setCurrentPiece(Piece currentPiece) {
 		this.currentPiece = currentPiece;
@@ -154,7 +183,6 @@ public class Game {
 
 	/**
 	 * Getter method for the next piece.
-	 * 
 	 * @return the next piece
 	 */
 	public Piece getNextPiece() {
@@ -163,9 +191,7 @@ public class Game {
 
 	/**
 	 * Setter method for the next piece.
-	 * 
-	 * @param nextPiece
-	 *            the next piece to set
+	 * @param nextPiece the next piece to set
 	 */
 	public void setNextPiece(Piece nextPiece) {
 		this.nextPiece = nextPiece;
@@ -173,7 +199,6 @@ public class Game {
 
 	/**
 	 * Getter method for the points.
-	 * 
 	 * @return the points
 	 */
 	public int getPoints() {
@@ -182,9 +207,7 @@ public class Game {
 
 	/**
 	 * Setter method for the points.
-	 * 
-	 * @param points
-	 *            the points to set
+	 * @param points the points to set
 	 */
 	public void setPoints(int points) {
 		this.points = points;
@@ -192,7 +215,6 @@ public class Game {
 
 	/**
 	 * Getter method for the game state.
-	 * 
 	 * @return the state of the game
 	 */
 	public boolean isGameOver() {
@@ -201,9 +223,7 @@ public class Game {
 
 	/**
 	 * Setter method for the game state.
-	 * 
-	 * @param gameOver
-	 *            the state of the game to set
+	 * @param gameOver the state of the game to set
 	 */
 	public void setGameOver(boolean gameOver) {
 		this.gameOver = gameOver;
@@ -211,7 +231,6 @@ public class Game {
 
 	/**
 	 * Getter method for the tick count.
-	 * 
 	 * @return the tick count
 	 */
 	public int getTickCount() {
@@ -220,9 +239,7 @@ public class Game {
 
 	/**
 	 * Setter method for the tick count.
-	 * 
-	 * @param tickCount
-	 *            the tick count to set
+	 * @param tickCount the tick count to set
 	 */
 	public void setTickCount(int tickCount) {
 		this.tickCount = tickCount;

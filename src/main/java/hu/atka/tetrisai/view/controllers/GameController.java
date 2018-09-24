@@ -1,103 +1,28 @@
 //CHECKSTYLE:OFF
 package hu.atka.tetrisai.view.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import hu.atka.tetrisai.controller.game.Game;
-import hu.atka.tetrisai.controller.game.Piece;
-import hu.atka.tetrisai.controller.game.PieceAction;
-import hu.atka.tetrisai.view.main.Main;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
+import hu.atka.tetrisai.ai.BotClassroom;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
-public class GameController implements Initializable {
+public class GameController /*implements Initializable */{
 
-	@FXML
-	Node node;
 	@FXML
 	Label labelScore;
 	@FXML
 	Canvas canvasNextPiece;
 	@FXML
 	Canvas canvasField;
-	@FXML
-	Button buttonLeft;
-	@FXML
-	Button buttonRight;
-	@FXML
-	Button buttonRotateLeft;
-	@FXML
-	Button buttonRotateRight;
-	@FXML
-	Button buttonDown;
 
 	Timeline timeline;
 	GraphicsContext gcField;
 	GraphicsContext gcNextPiece;
-	Game game;
-
-	@FXML
-	private void handleButtonLeft(ActionEvent event) {
-		if (game.getCurrentPiece() != null
-				&& !game.getField().isPieceCollide(game.getCurrentPiece(), PieceAction.LEFT)) {
-			game.getCurrentPiece().move(-1, 0);
-		}
-		render();
-	}
-
-	@FXML
-	private void handleButtonRight(ActionEvent event) {
-		if (game.getCurrentPiece() != null
-				&& !game.getField().isPieceCollide(game.getCurrentPiece(), PieceAction.RIGHT)) {
-			game.getCurrentPiece().move(1, 0);
-		}
-		render();
-	}
-
-	@FXML
-	private void handleButtonRotateLeft(ActionEvent event) {
-		if (game.getCurrentPiece() != null
-				&& !game.getField().isPieceCollide(game.getCurrentPiece(), PieceAction.ROTATE_LEFT)) {
-			game.getCurrentPiece().rotate(false);
-		}
-		render();
-	}
-
-	@FXML
-	private void handleButtonRotateRight(ActionEvent event) {
-		if (game.getCurrentPiece() != null
-				&& !game.getField().isPieceCollide(game.getCurrentPiece(), PieceAction.ROTATE_RIGHT)) {
-			game.getCurrentPiece().rotate(true);
-		}
-		render();
-	}
-
-	@FXML
-	private void handleButtonDown(ActionEvent event) {
-		if (game.getCurrentPiece() != null
-				&& !game.getField().isPieceCollide(game.getCurrentPiece(), PieceAction.DOWN)) {
-			game.getCurrentPiece().move(0, 1);
-		}
-		render();
-	}
+	BotClassroom classroom;
 
 	private Paint getBlockColorFromInt(int color) {
 		switch (color) {
@@ -119,7 +44,7 @@ public class GameController implements Initializable {
 			return Color.BLACK;
 		}
 	}
-
+/*
 	private void drawBlockOnGc(GraphicsContext gc, int x, int y, int color) {
 		gc.setFill(getBlockColorFromInt(color));
 		gc.fillRect(x * 16, y * 16, 15, 15);
@@ -197,20 +122,6 @@ public class GameController implements Initializable {
 		} else {
 			Main.score = game.getPoints();
 			timeline.stop();
-
-			Stage stage;
-			Parent root;
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameOverFXML.fxml"));
-				root = loader.load();
-				loader.<GameOverController> getController();
-				stage = (Stage) buttonDown.getScene().getWindow();
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				stage.show();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -225,5 +136,5 @@ public class GameController implements Initializable {
 		}));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
-	}
+	}*/
 }
