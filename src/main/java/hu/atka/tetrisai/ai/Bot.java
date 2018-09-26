@@ -40,6 +40,19 @@ public class Bot {
 		return result;
 	}
 
+	public int[][][] getNeuronMap() {
+		int[][][] result = new int[20][10][4];
+		for (Neuron neuron : neurons) {
+			int neuronX = neuron.getWatchedX();
+			int neuronY = neuron.getWatchedY();
+			result[neuronY][neuronX][0] = 1;
+			result[neuronY][neuronX][1] = (neuron.isWatchedBlock() ? 1 : 0);
+			result[neuronY][neuronX][2] = (int) (neuron.getIntensity() * 100.0);
+			result[neuronY][neuronX][3] = neuron.getAction().getIntValue();
+		}
+		return result;
+	}
+
 	public int getId() {
 		return id;
 	}

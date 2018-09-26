@@ -13,12 +13,12 @@ public class NeuronMutator {
 	private static Logger logger = LoggerFactory.getLogger(NeuronMutator.class);
 
 	private Random rand;
-	private final double CHANCE_TO_ADD_NEURON = 0.03;
-	private final double CHANCE_TO_MODIFY_POSITION_NEURON = 0.05;
-	private final double CHANCE_TO_MODIFY_BLOCK_NEURON = 0.005;
-	private final double CHANCE_TO_MODIFY_ACTION_NEURON = 0.008;
-	private final double CHANCE_TO_MODIFY_INTENSITY_NEURON = 0.1;
-	private final double CHANCE_TO_REMOVE_NEURON = 0.01;
+	private final double CHANCE_TO_ADD_NEURON = 0.5;
+	private final double CHANCE_TO_MODIFY_POSITION_NEURON = 0.1;
+	private final double CHANCE_TO_MODIFY_BLOCK_NEURON = 0.05;
+	private final double CHANCE_TO_MODIFY_ACTION_NEURON = 0.08;
+	private final double CHANCE_TO_MODIFY_INTENSITY_NEURON = 0.5;
+	private final double CHANCE_TO_REMOVE_NEURON = 0.1;
 
 	public NeuronMutator() {
 		this.rand = new Random();
@@ -101,7 +101,7 @@ public class NeuronMutator {
 	}
 
 	private void modifyNeuronIntensity(Neuron neuron) {
-		neuron.setIntensity(neuron.getIntensity() + ((rand.nextDouble() - 0.5) / 5));
+		neuron.setIntensity(neuron.getIntensity() + (rand.nextDouble() - 0.5));
 	}
 
 	private Neuron buildRandomNeuron() {

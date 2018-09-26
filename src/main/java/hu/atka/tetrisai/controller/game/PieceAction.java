@@ -10,21 +10,31 @@ public enum PieceAction {
 	/**
 	 * Downward movement.
 	 */
-	DOWN,
+	DOWN(1),
 	/**
 	 * Movement to the left.
 	 */
-	LEFT,
+	LEFT(2),
 	/**
 	 * Movement to the right.
 	 */
-	RIGHT,
+	RIGHT(3),
 	/**
 	 * Rotation to the left.
 	 */
-	ROTATE_LEFT,
+	ROTATE_LEFT(4),
 	/**
 	 * Rotation to the right.
 	 */
-	ROTATE_RIGHT
+	ROTATE_RIGHT(5);
+
+	private int intValue;
+
+	PieceAction(int intValue) {
+		this.intValue = intValue;
+	}
+
+	public int getIntValue() {
+		return intValue;
+	}
 }

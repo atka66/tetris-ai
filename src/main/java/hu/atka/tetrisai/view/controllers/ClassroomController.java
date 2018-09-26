@@ -20,23 +20,29 @@ public class ClassroomController implements Initializable {
 
 	private BotClassroom classroom;
 	private GraphicsContext gcField;
+	private GraphicsContext gcNeurons;
 
 	@FXML
-	private Label labelCurrentGenerationNumber;
+	private Label labelGenNumber;
 	@FXML
-	private Label labelCurrentGenerationFittestBotFitness;
+	private Label labelFittestId;
 	@FXML
-	private Label labelCurrentGenerationFittestBotNeuronCount;
+	private Label labelFittestFitness;
 	@FXML
-	private Label labelCurrentGenerationFittestBotLifespan;
+	private Label labelFittestLifespan;
 	@FXML
-	private Label labelCurrentGenerationFittestBotPoints;
+	private Label labelFittestPoints;
+	@FXML
+	private Label labelFittestNeuronCount;
 	@FXML
 	private Canvas canvasField;
+	@FXML
+	private Canvas canvasNeurons;
 
 	public void initialize(URL location, ResourceBundle resources) {
 		classroom = new BotClassroom();
 		gcField = canvasField.getGraphicsContext2D();
+		gcNeurons = canvasNeurons.getGraphicsContext2D();
 	}
 
 	@FXML
@@ -50,16 +56,17 @@ public class ClassroomController implements Initializable {
 				for (int i = 0; i < value; i++) {
 					classroom.testStudents();
 					Bot fittestBot = classroom.getFittestStudent();
-					// Update the GUI on the JavaFX Application Thread
 					Platform.runLater(
 						() -> {
-							labelCurrentGenerationNumber.setText(String.valueOf(classroom.getGenerationCount()));
-							labelCurrentGenerationFittestBotFitness.setText(String.valueOf(fittestBot.getFitness()));
-							labelCurrentGenerationFittestBotNeuronCount.setText(String.valueOf(fittestBot.getNeurons().size()));
-							labelCurrentGenerationFittestBotLifespan.setText(String.valueOf(classroom.getCurrentFittestStudentsGame().getTickCount()));
-							labelCurrentGenerationFittestBotPoints.setText(String.valueOf(classroom.getCurrentFittestStudentsGame().getPoints()));
+							labelGenNumber.setText(String.valueOf(classroom.getGenerationCount()));
+							labelFittestId.setText(String.valueOf(fittestBot.getId()));
+							labelFittestFitness.setText(String.valueOf(fittestBot.getFitness()));
+							labelFittestNeuronCount.setText(String.valueOf(fittestBot.getNeurons().size()));
+							labelFittestLifespan.setText(String.valueOf(classroom.getCurrentFittestStudentsGame().getTickCount()));
+							labelFittestPoints.setText(String.valueOf(classroom.getCurrentFittestStudentsGame().getPoints()));
 							clearAll();
 							drawField();
+							drawNeurons();
 						});
 				}
 				return null;
@@ -97,6 +104,36 @@ public class ClassroomController implements Initializable {
 		gc.strokeRect(x * 16, y * 16, 15, 15);
 	}
 
+	private void drawNeuronOnGc(GraphicsContext gc, int x, int y, int[] neuron) {
+		// if watched block ? white : black
+		gcNeurons.setStroke(neuron[1] == 0 ? Color.WHITE : Color.DARKGRAY);
+		Color neuronColor;
+		switch (neuron[3]) {
+			case 1:
+				neuronColor = Color.CYAN;
+				break;
+			case 2:
+				neuronColor = Color.BLUE;
+				break;
+			case 3:
+				neuronColor = Color.ORANGE;
+				break;
+			case 4:
+				neuronColor = Color.YELLOW;
+				break;
+			case 5:
+				neuronColor = Color.GREEN;
+				break;
+			default:
+				neuronColor = Color.BLACK;
+				break;
+		}
+		gc.setFill(neuronColor);
+		int radius = neuron[2] / 10;
+		gc.strokeRect(x * 16, y * 16, 15, 15);
+		gc.fillOval((x * 16) + (8 - radius), (y * 16) + (8 - radius), radius * 2, radius * 2);
+	}
+
 	private void drawField() {
 		gcField.setStroke(Color.BLACK);
 		int[][] fieldMap = classroom.getCurrentFittestStudentsGame().getField().getMap();
@@ -104,6 +141,19 @@ public class ClassroomController implements Initializable {
 			for (int j = 0; j < fieldMap[i].length; j++) {
 				if (fieldMap[i][j] != 0) {
 					drawBlockOnGc(gcField, j, i, fieldMap[i][j]);
+				}
+			}
+		}
+	}
+
+	private void drawNeurons() {
+		gcNeurons.setStroke(Color.BLACK);
+		int[][][] neuronMap = classroom.getFittestStudent().getNeuronMap();
+		for (int i = 0; i < neuronMap.length; i++) {
+			for (int j = 0; j < neuronMap[i].length; j++) {
+				int[] neuron = neuronMap[i][j];
+				if (neuron[0] == 1) {
+					drawNeuronOnGc(gcNeurons, j, i, neuron);
 				}
 			}
 		}
@@ -130,6 +180,15 @@ public class ClassroomController implements Initializable {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 20; j++) {
 				gcField.strokeRect(i * 16, j * 16, 15, 15);
+			}
+		}
+
+		gcNeurons.setFill(Color.BLACK);
+		gcNeurons.fillRect(0, 0, 160, 320);
+		gcNeurons.setStroke(Color.GRAY);
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 20; j++) {
+				gcNeurons.strokeRect(i * 16, j * 16, 15, 15);
 			}
 		}
 	}
