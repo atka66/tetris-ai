@@ -149,6 +149,10 @@ public class Game {
 		}
 	}
 
+	public Bot getPlayer() {
+		return player;
+	}
+
 	/**
 	 * Getter method for the field.
 	 * @return the field

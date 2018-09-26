@@ -15,6 +15,11 @@ public class BotClassroom {
 
 	private BotBuilder builder = new BotBuilder();
 	private Set<Bot> students;
+	private Set<Game> games;
+
+	private Game currentFittestStudentsGame;
+
+	private int generationCount;
 
 	private final int INITIAL_NUMBER_OF_BOTS = 25;
 	/**
@@ -24,9 +29,11 @@ public class BotClassroom {
 
 	public BotClassroom() {
 		this.students = new HashSet<>();
+		this.games = new HashSet<>();
 		for (int i = 0; i < INITIAL_NUMBER_OF_BOTS; i++) {
 			this.students.add(builder.buildBasicBot());
 		}
+		this.generationCount = 0;
 		logger.info("Classroom brainmap: ");
 		logger.info(this.students.toString());
 		logger.info("Classroom initialized with " + INITIAL_NUMBER_OF_BOTS + " basic bots");
@@ -36,6 +43,7 @@ public class BotClassroom {
 		this.refillClassroom();
 		this.trainBots();
 		this.killOffWeakBots();
+		this.generationCount++;
 	}
 
 	/**
@@ -53,8 +61,10 @@ public class BotClassroom {
 		logger.info("Training of bots begins");
 		for (Bot bot : students) {
 			Game game = new Game(bot);
+			games.add(game);
 			game.playSession();
 		}
+		this.currentFittestStudentsGame = this.getFittestStudentsGame();
 		logger.info("Training of bots ended");
 	}
 
@@ -62,17 +72,26 @@ public class BotClassroom {
 	 * Throws out a specified ratio of students that were just not fit enough.
 	 */
 	private void killOffWeakBots() {
-		logger.info("FULL STUDENT SET:" + students.toString());
 		int size = this.students.size();
 		this.students =
 			this.students.stream().sorted(Comparator.comparing(Bot::getFitness).reversed()).limit(size / BOT_MULTIPLIER).collect(Collectors.toSet());
-		logger.info("PURGED STUDENT SET:" + students.toString());
-		logger.info("Weaker bots are killed off, there are " + this.students.size() + " bots left");
-		logger.info("Classroom brainmap: ");
-		logger.info(this.students.toString());
+		this.games.clear();
+	}
+
+	private Game getFittestStudentsGame() {
+		return games.stream().filter(game -> game.getPlayer().getId() == this.getFittestStudent().getId()).findFirst().get();
 	}
 
 	public Bot getFittestStudent() {
 		return students.stream().max(Comparator.comparing(Bot::getFitness)).get();
+	}
+
+
+	public Game getCurrentFittestStudentsGame() {
+		return currentFittestStudentsGame;
+	}
+
+	public int getGenerationCount() {
+		return generationCount;
 	}
 }

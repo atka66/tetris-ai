@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 import hu.atka.tetrisai.controller.game.PieceAction;
 
 public class Bot {
+	private int id;
 	private Set<Neuron> neurons;
 	private int fitness;
 
 	public Bot(Set<Neuron> neurons) {
+		this.id = IdGenerator.getNextId();
 		this.neurons = neurons;
 		this.fitness = 0;
 	}
@@ -36,6 +38,10 @@ public class Bot {
 			}
 		}
 		return result;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public Set<Neuron> getNeurons() {
